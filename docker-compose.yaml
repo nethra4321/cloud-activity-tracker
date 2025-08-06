@@ -1,0 +1,41 @@
+version: '3.8'
+
+networks:
+  local-redpanda:
+    driver: bridge
+
+services:
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: redpanda
+    networks:
+      - local-redpanda
+    ports:
+      - "9092:9092"   # for local dev apps (host)
+      - "9093:9093"   # for Kafka UI (internal container access)
+      - "9644:9644"   # Redpanda admin
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp=1
+      - --memory=1G
+      - --reserve-memory=0M
+      - --node-id=0
+      - --check=false
+      - --kafka-addr=PLAINTEXT://0.0.0.0:9092,INSIDE://0.0.0.0:9093
+      - --advertise-kafka-addr=PLAINTEXT://localhost:9092,INSIDE://redpanda:9093
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    networks:
+      - local-redpanda
+    depends_on:
+      - redpanda
+    ports:
+      - "7777:8080"  # UI accessible at localhost:7777
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=redpanda
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=redpanda:9093
+      - KAFKA_CLUSTERS_0_METRICS_PORT=9644

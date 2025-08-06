@@ -55,3 +55,4 @@ D:\cloud-activity-tracker\backend\obj\Debug\net8.0\refint\backend.dll
 D:\cloud-activity-tracker\backend\obj\Debug\net8.0\backend.pdb
 D:\cloud-activity-tracker\backend\obj\Debug\net8.0\backend.genruntimeconfig.cache
 D:\cloud-activity-tracker\backend\obj\Debug\net8.0\ref\backend.dll
+D:\cloud-activity-tracker\backend\obj\Debug\net8.0\backend.sourcelink.json
