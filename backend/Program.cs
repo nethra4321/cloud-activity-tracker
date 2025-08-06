@@ -2,6 +2,9 @@ using Confluent.Kafka;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,12 @@ builder.Services.AddSingleton<IProducer<Null, string>>(sp => {
     };
     return new ProducerBuilder<Null, string>(config).Build();
 });
+
+
+builder.Services.AddDbContext<ActivityDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    
+builder.Services.AddHostedService<ActivityConsumerService>();
 
 var app = builder.Build();
 

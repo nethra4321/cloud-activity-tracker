@@ -3,6 +3,8 @@ version: '3.8'
 networks:
   local-redpanda:
     driver: bridge
+  activity-net:
+    driver: bridge
 
 services:
   redpanda:
@@ -34,8 +36,38 @@ services:
     depends_on:
       - redpanda
     ports:
-      - "7777:8080"  # UI accessible at localhost:7777
+      - "7777:8080"
     environment:
       - KAFKA_CLUSTERS_0_NAME=redpanda
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=redpanda:9093
       - KAFKA_CLUSTERS_0_METRICS_PORT=9644
+
+  postgres:
+    image: postgres:15
+    container_name: activity-postgres
+    networks:
+      - activity-net
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ActivityDB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: activity-pgadmin
+    networks:
+      - activity-net
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+
+volumes:
+  pgdata:
