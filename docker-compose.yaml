@@ -13,9 +13,9 @@ services:
     networks:
       - local-redpanda
     ports:
-      - "9092:9092"   # for local dev apps (host)
-      - "9093:9093"   # for Kafka UI (internal container access)
-      - "9644:9644"   # Redpanda admin
+      - "9092:9092"   
+      - "9093:9093"   
+      - "9644:9644"   
     command:
       - redpanda
       - start

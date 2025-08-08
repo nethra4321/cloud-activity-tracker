@@ -23,10 +23,6 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ActivityEvent activity)
         {
-            // Save to PostgreSQL
-            // _context.ActivityEvents.Add(activity);
-            // await _context.SaveChangesAsync();
-
             // Send to Kafka
             var json = JsonSerializer.Serialize(activity);
             await _producer.ProduceAsync("activity-events", new Message<Null, string> { Value = json });

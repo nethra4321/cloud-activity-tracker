@@ -7,6 +7,8 @@ namespace backend.Models
         public int Id { get; set; }
         public string EventType { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; }
-       public string UserId { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+        public string email { get; set; }
+        public string EncryptedPassword { get; set; } 
     }
 }

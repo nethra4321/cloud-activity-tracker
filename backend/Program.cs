@@ -5,10 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using DotNetEnv;
 
+Env.Load("../.env");
 var builder = WebApplication.CreateBuilder(args);
 
-// Add CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -35,9 +36,10 @@ builder.Services.AddDbContext<ActivityDbContext>(options =>
     
 builder.Services.AddHostedService<ActivityConsumerService>();
 
+builder.Services.AddSingleton<EmailService>();
+
 var app = builder.Build();
 
-// Use the defined CORS policy
 app.UseCors("AllowFrontend");
 
 

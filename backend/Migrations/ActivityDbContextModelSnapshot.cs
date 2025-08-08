@@ -30,6 +30,9 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("EncryptedPassword")
+                        .HasColumnType("text");
+
                     b.Property<string>("EventType")
                         .HasColumnType("text");
 
@@ -37,6 +40,9 @@ namespace backend.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("email")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

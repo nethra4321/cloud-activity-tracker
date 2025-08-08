@@ -11,11 +11,13 @@ using System;
 public class ActivityConsumerService : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
+    private EmailService _emailService;
     private readonly IConsumer<Ignore, string> _consumer;
 
-    public ActivityConsumerService(IServiceScopeFactory scopeFactory)
+    public ActivityConsumerService(IServiceScopeFactory scopeFactory, EmailService emailService)
     {
         _scopeFactory = scopeFactory;
+        _emailService = emailService;
 
         var config = new ConsumerConfig
         {
@@ -28,31 +30,47 @@ public class ActivityConsumerService : BackgroundService
         _consumer.Subscribe("activity-events");
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+   protected override Task ExecuteAsync(CancellationToken stoppingToken)
+{
+    return Task.Run(() =>
     {
-        return Task.Run(() =>
+        while (!stoppingToken.IsCancellationRequested)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                try
-                {
-                    var cr = _consumer.Consume(stoppingToken);
-                    var activity = JsonSerializer.Deserialize<ActivityEvent>(cr.Message.Value);
+                var cr = _consumer.Consume(stoppingToken);
+                var activity = JsonSerializer.Deserialize<ActivityEvent>(cr.Message.Value);
 
+                if (activity != null && activity.EventType == "UserLogin")
+                {
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var db = scope.ServiceProvider.GetRequiredService<ActivityDbContext>();
                         db.ActivityEvents.Add(activity);
                         db.SaveChanges();
+                        Console.WriteLine("UserLogin stored to DB");
                     }
                 }
-                catch (Exception ex)
+                else if (activity?.EventType == "tab_hidden" || activity?.EventType == "tab_visible")
                 {
-                    Console.WriteLine($"Kafka Consumer Error: {ex.Message}");
+                    var subject = $"{activity.EventType} event detected";
+                    var body = $"User {activity.UserId} with email {activity.email} triggered {activity.EventType} at {activity.Timestamp}";
+
+                    _emailService.SendNotificationEmailAsync(subject, body).Wait();
+                    Console.WriteLine($"Email sent for event: {activity.EventType}");
+                }
+                else
+                {
+                    Console.WriteLine($"Ignored event: {activity?.EventType}");
                 }
             }
-        }, stoppingToken);
-    }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Kafka Consumer Error: {ex.Message}");
+            }
+        }
+    }, stoppingToken);
+}
 
     public override void Dispose()
     {
