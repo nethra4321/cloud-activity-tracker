@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -25,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IProducer<Null, string>>(sp => {
     var config = new ProducerConfig
     {
-        BootstrapServers = "localhost:9092"
+        BootstrapServers = "redpanda:9092"
     };
     return new ProducerBuilder<Null, string>(config).Build();
 });
@@ -39,6 +39,11 @@ builder.Services.AddHostedService<ActivityConsumerService>();
 builder.Services.AddSingleton<EmailService>();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ActivityDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseCors("AllowFrontend");
 

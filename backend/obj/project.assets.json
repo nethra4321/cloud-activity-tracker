@@ -6017,19 +6017,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nethra\\.nuget\\packages\\": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\cloud-activity-tracker\\backend\\backend.csproj",
+      "projectUniqueName": "/app/backend/backend.csproj",
       "projectName": "backend",
-      "projectPath": "D:\\cloud-activity-tracker\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\nethra\\.nuget\\packages\\",
-      "outputPath": "D:\\cloud-activity-tracker\\backend\\obj\\",
+      "projectPath": "/app/backend/backend.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/app/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\nethra\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -6104,7 +6104,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.412/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.413/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

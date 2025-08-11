@@ -21,7 +21,7 @@ public class ActivityConsumerService : BackgroundService
 
         var config = new ConsumerConfig
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = "redpanda:9092",
             GroupId = "activity-group",
             AutoOffsetReset = AutoOffsetReset.Earliest
         };
