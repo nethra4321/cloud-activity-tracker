@@ -14,7 +14,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "http://activity-frontend.s3-website.eu-north-1.amazonaws.com")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

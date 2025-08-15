@@ -10,7 +10,7 @@ const props = defineProps({
 let activityTimeout
 
 const sendActivity = (eventType) => {
-  axios.post('http://localhost:5000/api/activity', {
+  axios.post('http://51.20.140.225:5000/api/activity', {
     eventType,
     timestamp: new Date().toISOString(),
     userId: props.userId

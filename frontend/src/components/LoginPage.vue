@@ -17,7 +17,7 @@ const login = () => {
 
   const encryptedPassword = CryptoJS.SHA256(password.value).toString()
 
-  axios.post('http://localhost:5000/api/activity', {
+  axios.post('http://51.20.140.225:5000/api/activity', {
     eventType: 'UserLogin',
     timestamp: new Date().toISOString(),
     userId: username.value,
