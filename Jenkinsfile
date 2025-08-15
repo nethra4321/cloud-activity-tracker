@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins credential ID
-        AWS_CREDENTIALS = credentials('ubuntu') // Jenkins credential ID
+        AWS_CREDENTIALS = credentials('ec2-ssh') // Jenkins credential ID
         IMAGE_NAME = 'nethra4321/activity-backend'
         IMAGE_TAG = "latest"
         EC2_USER = 'ubuntu'
@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/cloud-activity-tracker.git'
+                git branch: 'master', url: 'https://github.com/nethra4321/cloud-activity-tracker.git'
             }
         }
 
