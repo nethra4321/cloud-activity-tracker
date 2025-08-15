@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nethra4321/activity-backend:latest .'
+                  sh 'docker build -t nethra4321/activity-backend:latest ./backend'
             }
         }
 
