@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') // Jenkins credential ID
-        AWS_CREDENTIALS = credentials('ec2-ssh') // This can be removed if not needed
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
+        AWS_CREDENTIALS = credentials('ec2-ssh') 
         IMAGE_NAME = 'nethra4321/activity-backend'
         IMAGE_TAG = "latest"
         EC2_USER = 'ubuntu'
@@ -27,7 +27,7 @@ pipeline {
                         docker restart activity-backend
                     '
                     """
-                
+                }
             }
         }
     }
