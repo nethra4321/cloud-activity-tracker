@@ -11,6 +11,27 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/cloud-activity-tracker.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG ./activity-backend'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                sh """
+                echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+                docker push $IMAGE_NAME:$IMAGE_TAG
+                """
+            }
+        }
+        
         stage('Deploy on EC2') {
             steps {
                 sshagent(credentials: ['ec2-ssh']) {
