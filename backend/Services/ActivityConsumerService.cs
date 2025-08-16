@@ -53,7 +53,7 @@ public class ActivityConsumerService : BackgroundService
                 }
                 else if (activity?.EventType == "tab_hidden" || activity?.EventType == "tab_visible")
                 {
-                    var subject = $"{activity.EventType} event detected";
+                    var subject = $"{activity.EventType} event detected!!";
                     var body = $"User {activity.UserId} with email {activity.email} triggered {activity.EventType} at {activity.Timestamp}";
 
                     _emailService.SendNotificationEmailAsync(subject, body).Wait();
