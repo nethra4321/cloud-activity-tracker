@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/cloud-activity-tracker.git'
+                git branch: 'master', url: 'https://github.com/nethra4321/cloud-activity-tracker.git'
             }
         }
 
@@ -31,7 +31,7 @@ pipeline {
                 """
             }
         }
-        
+
         stage('Deploy on EC2') {
             steps {
                 sshagent(credentials: ['ec2-ssh']) {
