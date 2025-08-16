@@ -24,10 +24,10 @@ pipeline {
 
                         docker exec -i redpanda rpk topic create activity-events || true &&
 
-                        docker-compose restart activity-backend
+                        docker restart activity-backend
                     '
                     """
-                }
+                
             }
         }
     }
