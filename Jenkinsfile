@@ -17,30 +17,30 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                  sh 'docker build -t nethra4321/activity-backend:latest ./backend'
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //           sh 'docker build -t nethra4321/activity-backend:latest ./backend'
+        //     }
+        // }
 
-        stage('Push to Docker Hub') {
-            steps {
-                sh """
-                echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
-                docker push $IMAGE_NAME:$IMAGE_TAG
-                """
-            }
-        }
-
-        // stage('Upload Static to S3') {
+        // stage('Push to Docker Hub') {
         //     steps {
         //         sh """
-        //         aws configure set aws_access_key_id $AWS_CREDENTIALS_USR
-        //         aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW
-        //         aws s3 sync ./frontend/dist s3://your-bucket-name --delete
+        //         echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+        //         docker push $IMAGE_NAME:$IMAGE_TAG
         //         """
         //     }
         // }
+
+        // // stage('Upload Static to S3') {
+        // //     steps {
+        // //         sh """
+        // //         aws configure set aws_access_key_id $AWS_CREDENTIALS_USR
+        // //         aws configure set aws_secret_access_key $AWS_CREDENTIALS_PSW
+        // //         aws s3 sync ./frontend/dist s3://your-bucket-name --delete
+        // //         """
+        // //     }
+        // // }
 
         stage('Deploy on EC2') {
             steps {
