@@ -17,20 +17,20 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                  sh 'docker build -t nethra4321/activity-backend:latest ./backend'
-            }
-        }
+    //     stage('Build Docker Image') {
+    //         steps {
+    //               sh 'docker build -t nethra4321/activity-backend:latest ./backend'
+    //         }
+    //     }
 
-        stage('Push to Docker Hub') {
-            steps {
-                sh """
-                echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
-                docker push $IMAGE_NAME:$IMAGE_TAG
-                """
-            }
-        }
+    //     stage('Push to Docker Hub') {
+    //         steps {
+    //             sh """
+    //             echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+    //             docker push $IMAGE_NAME:$IMAGE_TAG
+    //             """
+    //         }
+    //     }
 
         // stage('Upload Static to S3') {
         //     steps {
@@ -44,21 +44,24 @@ pipeline {
 
         stage('Deploy on EC2') {
             steps {
-                sh """
-                ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST '
-                    export IMAGE_TAG=$IMAGE_TAG &&
+                sshagent(credentials: ['ec2-ssh']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST '
+                        export IMAGE_TAG=$IMAGE_TAG &&
 
-                    docker-compose pull &&
-                    docker-compose down &&
-                    docker-compose up -d &&
+                        docker-compose pull &&
+                        docker-compose down &&
+                        docker-compose up -d &&
 
-                    docker exec -i redpanda rpk topic create activity-events || true &&
+                        docker exec -i redpanda rpk topic create activity-events || true &&
 
-                    docker-compose restart activity-backend
-                '
-                """
+                        docker-compose restart activity-backend
+                    '
+                    """
+                }
             }
         }
+
 
     }
 
